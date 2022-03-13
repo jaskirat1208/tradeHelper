@@ -1,0 +1,20 @@
+<component name="libraryTable">
+  <library name="knowm.xchart" type="repository">
+    <properties maven-id="org.knowm.xchart:xchart:3.6.1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/xchart-3.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/VectorGraphics2D-0.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/graphics2d-0.25.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/pdfbox-2.0.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/fontbox-2.0.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/xchart-3.6.1-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/VectorGraphics2D-0.13-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/graphics2d-0.25-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-logging-1.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
