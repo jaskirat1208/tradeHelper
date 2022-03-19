@@ -1,18 +1,18 @@
 package platform;
 
 import strategy.BaseStrategy;
-import utils.NiftyIndices;
 
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class PlatformApp {
     BaseStrategy mStrategy;
     NseIndexPriceFetcher mFeedFetcher = new NseIndexPriceFetcher();
+    OMService mOMService = OMService.getInstance();
 
     public void init() {
         Thread t = new Thread(mFeedFetcher);
+        mOMService.registerPriceFetcher(mFeedFetcher);
         t.start();
     }
 
@@ -21,7 +21,8 @@ public class PlatformApp {
         TimerTask timertask = new TimerTask() {
             @Override
             public void run() {
-                mStrategy.onMarketUpdate();
+                if(mFeedFetcher.newFeed())
+                    mStrategy.onMarketUpdate();
             }
         };
         Timer timer = new Timer();

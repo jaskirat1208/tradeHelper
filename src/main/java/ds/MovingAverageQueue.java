@@ -15,7 +15,7 @@ public class MovingAverageQueue {
     public void push(double price) {
         rollingSum += price;
         if(pricesQueue.size() == mSize) {
-            pricesQueue.remove();
+            rollingSum -= pricesQueue.remove();
         }
 
         pricesQueue.add(price);

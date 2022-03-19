@@ -16,6 +16,7 @@ public class NseIndexPriceFetcher extends TimerTask {
     private HashMap<String, NiftyIndices> mIndicesHashMap = new HashMap<>();
 
     private int mExecutionCount = 0;
+    private boolean mNewFeedReceived = false;
 
     private synchronized void getIndexPricesFromAPI() throws IOException, InterruptedException {
         RequestHelper helper = new RequestHelper();
@@ -27,6 +28,7 @@ public class NseIndexPriceFetcher extends TimerTask {
             mIndicesHashMap.put(instrumentName, indexInfo);
         }
         mExecutionCount++;
+        mNewFeedReceived = true;
     }
 
     public NseIndexPriceFetcher() {
@@ -42,6 +44,9 @@ public class NseIndexPriceFetcher extends TimerTask {
 
         String lastPriceString = indexInfo.getLast();
         System.out.println("Getting price from API Call: " + this.mExecutionCount);
+
+        /* Mark feed as stale */
+        mNewFeedReceived = false;
         return Double.parseDouble(lastPriceString.replace(",", ""));
     }
 
@@ -57,4 +62,7 @@ public class NseIndexPriceFetcher extends TimerTask {
     }
 
 
+    public boolean newFeed() {
+        return mNewFeedReceived;
+    }
 }

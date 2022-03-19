@@ -1,7 +1,7 @@
 package strategy;
 
 import ds.MovingAverageQueue;
-import platform.NseIndexPriceFetcher;
+import platform.OMService;
 
 public class MovingAverageCrossoverStrat extends BaseStrategy {
     static String INDEX = "NIFTY 50";
@@ -10,6 +10,7 @@ public class MovingAverageCrossoverStrat extends BaseStrategy {
 
     private MovingAverageQueue mSlowMAQueue = new MovingAverageQueue(SLOW_WINDOW_SIZE);
     private MovingAverageQueue mFastMAQueue = new MovingAverageQueue(FAST_WINDOW_SIZE);
+    private OMService mOMService = OMService.getInstance();
 
     /**
      * 0 => Both are equal
@@ -34,17 +35,19 @@ public class MovingAverageCrossoverStrat extends BaseStrategy {
         double slowMA = mSlowMAQueue.getMovingAverage();
         double fastMA = mFastMAQueue.getMovingAverage();
 
-        if(slowMA > fastMA) {
-            if(lastMAComparisonResult == 2) {
-                System.out.println("Buy Signal Triggered");
-            }
-            lastMAComparisonResult = 1;
-        }
-        else if(slowMA < fastMA) {
+        System.out.printf("Slow MA: %f, Fast MA: %f%n", slowMA, fastMA);
+
+        if(fastMA > slowMA) {
             if(lastMAComparisonResult == 1) {
-                System.out.println("Sell Signal Triggered");
+                mOMService.Buy(INDEX);
             }
             lastMAComparisonResult = 2;
+        }
+        else if(slowMA > fastMA) {
+            if(lastMAComparisonResult == 2) {
+                mOMService.Sell(INDEX);
+            }
+            lastMAComparisonResult = 1;
         }
 
     }
