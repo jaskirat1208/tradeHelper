@@ -13,5 +13,6 @@ class MovingAverageQueueTest {
         queue.push(2);
 
         assertEquals(1.5, queue.getMovingAverage());
+        assertEquals(0.5, queue.getSlope());
     }
 }

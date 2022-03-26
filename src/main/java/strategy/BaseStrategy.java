@@ -1,16 +1,16 @@
 package strategy;
 
-import platform.NseIndexPriceFetcher;
+import platform.mktdataread.FeedReceiver;
 
 
 public abstract class BaseStrategy {
-    protected NseIndexPriceFetcher mFeedFetcher;
+    protected FeedReceiver mFeedFetcher;
 
     public BaseStrategy() {}
 
     public abstract void init();
 
-    public void registerFeedFetcher(NseIndexPriceFetcher feedFetcher) {
+    public void registerFeedFetcher(FeedReceiver feedFetcher) {
         mFeedFetcher = feedFetcher;
     }
 

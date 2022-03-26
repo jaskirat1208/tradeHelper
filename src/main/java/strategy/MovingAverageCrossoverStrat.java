@@ -1,12 +1,14 @@
 package strategy;
 
 import ds.MovingAverageQueue;
-import platform.OMService;
+import platform.oms.OMService;
+import utils.NiftyIndices;
+import utils.StringUtils;
 
 public class MovingAverageCrossoverStrat extends BaseStrategy {
     static String INDEX = "NIFTY 50";
-    static int SLOW_WINDOW_SIZE = 100;
-    static int FAST_WINDOW_SIZE = 10;
+    static int SLOW_WINDOW_SIZE = 50;
+    static int FAST_WINDOW_SIZE = 15;
 
     private MovingAverageQueue mSlowMAQueue = new MovingAverageQueue(SLOW_WINDOW_SIZE);
     private MovingAverageQueue mFastMAQueue = new MovingAverageQueue(FAST_WINDOW_SIZE);
@@ -28,22 +30,27 @@ public class MovingAverageCrossoverStrat extends BaseStrategy {
 
     @Override
     public void onMarketUpdate() {
-        double price = mFeedFetcher.getLastPrice(INDEX);
+        NiftyIndices feedInfo = mFeedFetcher.getLastFeedInfo(INDEX);
+        double price = StringUtils.parseDoubleWCommasRemoved(feedInfo.getLast());
+
         mSlowMAQueue.push(price);
         mFastMAQueue.push(price);
 
         double slowMA = mSlowMAQueue.getMovingAverage();
         double fastMA = mFastMAQueue.getMovingAverage();
+        double slowSlope = mSlowMAQueue.getSlope();
+        double fastSlope = mFastMAQueue.getSlope();
 
-        System.out.printf("Slow MA: %f, Fast MA: %f%n", slowMA, fastMA);
+//        System.out.printf("Slow MA: %f, Fast MA: %f, Slow Slope: %f, Fast slope: %s\n",
+//                slowMA, fastMA, slowSlope, fastSlope);
 
-        if(fastMA > slowMA) {
+        if(fastSlope > slowSlope && fastMA > slowMA) {
             if(lastMAComparisonResult == 1) {
                 mOMService.Buy(INDEX);
             }
             lastMAComparisonResult = 2;
         }
-        else if(slowMA > fastMA) {
+        else if(slowSlope > fastSlope && slowMA > fastMA) {
             if(lastMAComparisonResult == 2) {
                 mOMService.Sell(INDEX);
             }
